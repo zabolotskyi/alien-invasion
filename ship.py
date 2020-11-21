@@ -1,12 +1,14 @@
 """A ship for Alien Invasion."""
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship:
+class Ship(Sprite):
     """A class to work with a ship."""
 
     def __init__(self, screen, settings):
         """Initialize the ship."""
+        super().__init__()
         self.screen = screen
         self.settings = settings
 
