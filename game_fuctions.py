@@ -71,10 +71,7 @@ def start_game(screen, settings, stats, sb, ship, aliens, bullets):
     stats.game_active = True
 
     # Reset the scoreboard and ships images.
-    sb.prep_score()
-    sb.prep_high_score()
-    sb.prep_level()
-    sb.prep_ships()
+    sb.prep_images()
 
     # Clean the screen from aliens and bullets.
     aliens.empty()
@@ -183,6 +180,17 @@ def update_screen(
     pygame.display.flip()
 
 
+def start_new_level(screen, settings, stats, sb, ship, aliens, bullets):
+    # Destroy all bullets, increase the game tempo and refill the aliens.
+    bullets.empty()
+    settings.increase_speed()
+    create_fleet(screen, settings, ship, aliens)
+
+    # Increase the level.
+    stats.level += 1
+    sb.prep_level()
+
+
 def check_bullet_alien_collisions(
     screen,
     settings,
@@ -205,14 +213,7 @@ def check_bullet_alien_collisions(
         check_high_score(stats, sb)
 
     if len(aliens) == 0:
-        # Destroy all bullets, increase the game tempo and refill the aliens.
-        bullets.empty()
-        settings.increase_speed()
-        create_fleet(screen, settings, ship, aliens)
-
-        # Increase the level.
-        stats.level += 1
-        sb.prep_level()
+        start_new_level(screen, settings, stats, sb, ship, aliens, bullets)
 
 
 def update_bullets(screen, settings, stats, sb, ship, aliens, bullets):
