@@ -1,10 +1,17 @@
 """Utils for handling game process."""
+import json
 import sys
 import pygame
 from time import sleep
 
 from alien import Alien
 from bullet import Bullet
+from consts import game_stats_file
+
+
+def store_high_score(high_score):
+    with open(game_stats_file, "w") as file:
+        json.dump(high_score, file)
 
 
 def fire_bullet(screen, settings, ship, bullets):
@@ -39,6 +46,7 @@ def check_keydown_events(
             start_game(screen, settings, stats, sb, ship, aliens, bullets)
 
     elif event.key == pygame.K_q:
+        store_high_score(stats.high_score)
         sys.exit()
 
 
@@ -109,6 +117,7 @@ def check_events(
     """Respond to keyboard and mouse events."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            store_high_score(stats.high_score)
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
