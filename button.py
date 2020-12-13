@@ -4,9 +4,9 @@ import pygame.font
 class Button:
     """A button to start/resume the game."""
 
-    def __init__(self, screen, settings, msg):
-        self.screen = screen
-        self.screen_rect = screen.get_rect()
+    def __init__(self, game, msg):
+        self.screen = game.screen
+        self.screen_rect = game.screen.get_rect()
 
         # Initialize button properties.
         self.width, self.height = 200, 50
@@ -18,9 +18,9 @@ class Button:
         self.rect = pygame.Rect(0, 0, self.width, self.height)
         self.rect.center = self.screen_rect.center
 
-        self.prep_msg(msg)
+        self._prep_msg(msg)
 
-    def prep_msg(self, msg):
+    def _prep_msg(self, msg):
         """Get a message and display it on the button in the center of the screen."""
         self.msg_image = self.font.render(msg, True, self.text_color, self.button_color)
         self.msg_image_rect = self.msg_image.get_rect()

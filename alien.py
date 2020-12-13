@@ -6,11 +6,11 @@ from pygame.sprite import Sprite
 class Alien(Sprite):
     """A class to work with an alien."""
 
-    def __init__(self, screen, settings):
+    def __init__(self, game):
         """Initialize the alien."""
         super().__init__()
-        self.screen = screen
-        self.settings = settings
+        self.screen = game.screen
+        self.settings = game.settings
 
         # Load the alien image and set its rect.
         self.image = pygame.image.load("images/alien.bmp")

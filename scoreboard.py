@@ -7,11 +7,11 @@ from ship import Ship
 class Scoreboard:
     """A scoreboard with game info."""
 
-    def __init__(self, screen, settings, stats):
-        self.screen = screen
-        self.screen_rect = screen.get_rect()
-        self.settings = settings
-        self.stats = stats
+    def __init__(self, game):
+        self.screen = game.screen
+        self.screen_rect = game.screen.get_rect()
+        self.settings = game.settings
+        self.stats = game.stats
 
         # Setup font settings.
         self.text_color = (30, 30, 30)
@@ -72,7 +72,7 @@ class Scoreboard:
         self.ships = Group()
 
         for ship_number in range(self.stats.ships_left):
-            ship = Ship(self.screen, self.settings)
+            ship = Ship(self)
             ship.image = pygame.transform.scale(ship.image, (50, 40))
             ship.rect.x = 10 + (ship_number * ship.rect.width)
             ship.rect.y = 10
