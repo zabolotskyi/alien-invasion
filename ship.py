@@ -18,9 +18,7 @@ class Ship(Sprite):
         self.screen_rect = screen.get_rect()
 
         # Place the ship at the bottom center.
-        self.rect.centerx = self.screen_rect.centerx
-        self.rect.centery = self.screen_rect.width / 2
-        self.rect.bottom = self.screen_rect.height
+        self.rect.midbottom = self.screen_rect.midbottom
 
         # Store a decimal value for the ship's center.
         self.center = float(self.rect.centerx)

@@ -1,62 +1,15 @@
 """Utils for handling game process."""
 import json
-import sys
 import pygame
 from time import sleep
 
 from alien import Alien
-from bullet import Bullet
 from consts import game_stats_file
 
 
 def store_high_score(high_score):
     with open(game_stats_file, "w") as file:
         json.dump(high_score, file)
-
-
-def fire_bullet(screen, settings, ship, bullets):
-    """Create a new bullet and add it to the bullets group."""
-    if len(bullets) < settings.bullets_allowed:
-        new_bullet = Bullet(screen, settings, ship)
-        bullets.add(new_bullet)
-
-
-def check_keydown_events(
-    event,
-    screen,
-    settings,
-    stats,
-    ship,
-    sb,
-    aliens,
-    bullets,
-):
-    """Respond to keypresses."""
-    if event.key == pygame.K_LEFT:
-        ship.moving_left = True
-
-    elif event.key == pygame.K_RIGHT:
-        ship.moving_right = True
-
-    elif event.key == pygame.K_SPACE:
-        fire_bullet(screen, settings, ship, bullets)
-
-    elif event.key == pygame.K_p:
-        if not stats.game_active:
-            start_game(screen, settings, stats, sb, ship, aliens, bullets)
-
-    elif event.key == pygame.K_q:
-        store_high_score(stats.high_score)
-        sys.exit()
-
-
-def check_keyup_events(event, ship):
-    """Respond to key releases."""
-    if event.key == pygame.K_LEFT:
-        ship.moving_left = False
-
-    elif event.key == pygame.K_RIGHT:
-        ship.moving_right = False
 
 
 def start_game(screen, settings, stats, sb, ship, aliens, bullets):
@@ -101,85 +54,6 @@ def check_play_button(
         start_game(screen, settings, stats, sb, ship, aliens, bullets)
 
 
-def check_events(
-    screen,
-    settings,
-    stats,
-    sb,
-    play_button,
-    ship,
-    aliens,
-    bullets,
-):
-    """Respond to keyboard and mouse events."""
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            store_high_score(stats.high_score)
-            sys.exit()
-
-        elif event.type == pygame.KEYDOWN:
-            check_keydown_events(
-                event,
-                screen,
-                settings,
-                stats,
-                ship,
-                sb,
-                aliens,
-                bullets,
-            )
-
-        elif event.type == pygame.KEYUP:
-            check_keyup_events(event, ship)
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(
-                screen,
-                settings,
-                stats,
-                sb,
-                play_button,
-                ship,
-                aliens,
-                bullets,
-                mouse_x,
-                mouse_y,
-            )
-
-
-def update_screen(
-    screen,
-    settings,
-    stats,
-    sb,
-    play_button,
-    ship,
-    aliens,
-    bullets,
-):
-    """Handle screen redraws."""
-    # Redraw the screen.
-    screen.fill(settings.bg_color)
-
-    # Redraw all bullets behind the ship and aliens.
-    for bullet in bullets.sprites():
-        bullet.draw_bullet()
-
-    ship.blitme()
-    aliens.draw(screen)
-
-    # Draw scores.
-    sb.show_score()
-
-    # Draw a play button if the game is inactive.
-    if not stats.game_active:
-        play_button.draw_button()
-
-    # Make the most recently drawn screen visible.
-    pygame.display.flip()
-
-
 def start_new_level(screen, settings, stats, sb, ship, aliens, bullets):
     # Destroy all bullets, increase the game tempo and refill the aliens.
     bullets.empty()
@@ -214,26 +88,6 @@ def check_bullet_alien_collisions(
 
     if len(aliens) == 0:
         start_new_level(screen, settings, stats, sb, ship, aliens, bullets)
-
-
-def update_bullets(screen, settings, stats, sb, ship, aliens, bullets):
-    """Redraw bullets."""
-    bullets.update()
-
-    # Delete off-screen bullets.
-    for bullet in bullets.copy():
-        if bullet.rect.bottom <= 0:
-            bullets.remove(bullet)
-
-    check_bullet_alien_collisions(
-        screen,
-        settings,
-        stats,
-        sb,
-        ship,
-        aliens,
-        bullets,
-    )
 
 
 def get_number_columns(settings, alien_width):
