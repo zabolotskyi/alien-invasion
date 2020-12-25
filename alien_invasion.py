@@ -15,6 +15,7 @@ from settings import Settings
 from ship import Ship
 
 from consts import game_stats_file
+import sound_effects as se
 
 
 class AlienInvasion:
@@ -144,6 +145,7 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            se.bullet_sound.play()
 
     def _update_bullets(self):
         """Redraw bullets."""
@@ -242,6 +244,7 @@ class AlienInvasion:
                 self.stats.score += len(aliens) * self.settings.alien_points
                 self.sb.prep_score()
                 self.sb.prep_high_score()
+                se.alien_sound.play()
 
             self._check_high_score()
 
